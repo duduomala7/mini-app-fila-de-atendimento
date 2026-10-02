@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Fila de Atendimento</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<header>
+    <div class="container">
+        <h1>Fila de Atendimento</h1>
+        <p>Gerenciamento de clientes por ordem de chegada</p>
+    </div>
+</header>
+
+
+<main class="container">
+
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+
+        {% if mensagens %}
+
+            {% for categoria, mensagem in mensagens %}
+
+                <div class="alert {{ categoria }}">
+                    {{ mensagem }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- PAINEL DE INDICADORES -->
+
+    <section class="cards">
+
+        <div class="card">
+            <span>Aguardando</span>
+            <strong>{{ aguardando }}</strong>
+        </div>
+
+        <div class="card">
+            <span>Em atendimento</span>
+            <strong>{{ atendimento }}</strong>
+        </div>
+
+        <div class="card">
+            <span>Concluídos</span>
+            <strong>{{ concluidos }}</strong>
+        </div>
+
+    </section>
+
+
+    <!-- CADASTRO -->
+
+    <section class="panel">
+
+        <h2>Cadastrar cliente</h2>
+
+        <form
+            action="{{ url_for('cadastrar') }}"
+            method="POST"
+            class="form"
+        >
+
+            <div>
+                <label for="nome">
+                    Nome do cliente
+                </label>
+
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Digite o nome"
+                    required
+                >
+            </div>
+
+
+            <div>
+                <label for="telefone">
+                    Telefone
+                </label>
+
+                <input
+                    type="text"
+                    id="telefone"
+                    name="telefone"
+                    placeholder="(00) 00000-0000"
+                >
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Adicionar à fila
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- CHAMAR PRÓXIMO -->
+
+    <section class="chamada">
+
+        <div>
+
+            <h2>Atendimento</h2>
+
+            <p>
+                O próximo cliente será chamado seguindo
+                a ordem FIFO.
+            </p>
+
+        </div>
+
+        <form
+            action="{{ url_for('chamar_proximo') }}"
+            method="POST"
+        >
+
+            <button
+                type="submit"
+                class="btn btn-success btn-large"
+            >
+                Chamar próximo
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- FILA -->
+
+    <section class="panel">
+
+        <div class="section-header">
+
+            <div>
+                <h2>Fila de espera</h2>
+
+                <p>
+                    Clientes organizados pela ordem de chegada.
+                </p>
+            </div>
+
+        </div>
+
+
+        {% if clientes %}
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Posição</th>
+                        <th>Senha</th>
+                        <th>Cliente</th>
+                        <th>Telefone</th>
+                        <th>Status</th>
+                        <th>Entrada</th>
+                        <th>Ações</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for cliente in clientes %}
+
+                    <tr>
+
+                        <td>
+                            {% if cliente.status == 'aguardando' %}
+                                {{ loop.index }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <strong class="senha">
+                                {{ cliente.senha }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ cliente.nome }}
+                        </td>
+
+                        <td>
+                            {{ cliente.telefone or '-' }}
+                        </td>
+
+                        <td>
+
+                            {% if cliente.status == 'aguardando' %}
+
+                                <span class="status aguardando">
+                                    Aguardando
+                                </span>
+
+                            {% elif cliente.status == 'em atendimento' %}
+
+                                <span class="status atendimento">
+                                    Em atendimento
+                                </span>
+
+                            {% elif cliente.status == 'concluído' %}
+
+                                <span class="status concluido">
+                                    Concluído
+                                </span>
+
+                            {% else %}
+
+                                <span class="status cancelado">
+                                    Cancelado
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ cliente.criado_em }}
+                        </td>
+
+                        <td>
+
+                            <div class="acoes">
+
+                                {% if cliente.status == 'aguardando' %}
+
+                                <form
+                                    action="{{ url_for('alterar_status', id=cliente.id) }}"
+                                    method="POST"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="em atendimento"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-small btn-success"
+                                    >
+                                        Atender
+                                    </button>
+
+                                </form>
+
+                                {% elif cliente.status == 'em atendimento' %}
+
+                                <form
+                                    action="{{ url_for('alterar_status', id=cliente.id) }}"
+                                    method="POST"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="concluído"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-small btn-primary"
+                                    >
+                                        Concluir
+                                    </button>
+
+                                </form>
+
+                                {% endif %}
+
+
+                                {% if cliente.status != 'concluído'
+                                    and cliente.status != 'cancelado' %}
+
+                                <form
+                                    action="{{ url_for('cancelar', id=cliente.id) }}"
+                                    method="POST"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-small btn-danger"
+                                        onclick="return confirm('Deseja cancelar este atendimento?')"
+                                    >
+                                        Cancelar
+                                    </button>
+
+                                </form>
+
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            <p>A fila está vazia.</p>
+        </div>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+
+<footer>
+    Sistema de Gerenciamento de Fila de Atendimento
+</footer>
+
+</body>
+
+</html>

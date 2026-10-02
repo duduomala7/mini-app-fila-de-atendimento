@@ -1,0 +1,293 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #263238;
+}
+
+header {
+    background: #1976d2;
+    color: white;
+    padding: 30px 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+header h1 {
+    margin-bottom: 8px;
+}
+
+header p {
+    opacity: 0.9;
+}
+
+
+/* INDICADORES */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card span {
+    display: block;
+    color: #607d8b;
+    margin-bottom: 10px;
+}
+
+.card strong {
+    font-size: 32px;
+}
+
+
+/* PAINÉIS */
+
+.panel {
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.panel h2 {
+    margin-bottom: 20px;
+}
+
+
+/* FORMULÁRIO */
+
+.form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 15px;
+    align-items: end;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cfd8dc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: 2px solid #90caf9;
+}
+
+
+/* BOTÕES */
+
+.btn {
+    border: none;
+    border-radius: 6px;
+    padding: 12px 18px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-primary {
+    background: #1976d2;
+}
+
+.btn-success {
+    background: #2e7d32;
+}
+
+.btn-danger {
+    background: #d32f2f;
+}
+
+.btn-small {
+    padding: 8px 10px;
+    font-size: 12px;
+}
+
+.btn-large {
+    padding: 15px 25px;
+    font-size: 16px;
+}
+
+
+/* CHAMADA */
+
+.chamada {
+    background: #e3f2fd;
+    border-left: 5px solid #1976d2;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.chamada h2 {
+    margin-bottom: 8px;
+}
+
+.chamada p {
+    color: #546e7a;
+}
+
+
+/* TABELA */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 14px;
+    border-bottom: 1px solid #eceff1;
+    text-align: left;
+}
+
+th {
+    background: #f5f7f8;
+}
+
+.senha {
+    color: #1976d2;
+    font-size: 20px;
+}
+
+.acoes {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+
+/* STATUS */
+
+.status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status.aguardando {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status.atendimento {
+    background: #cfe8ff;
+    color: #0d47a1;
+}
+
+.status.concluido {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.cancelado {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+
+/* ALERTAS */
+
+.alert {
+    padding: 15px;
+    margin-top: 25px;
+    border-radius: 6px;
+}
+
+.alert.sucesso {
+    background: #d4edda;
+    color: #155724;
+}
+
+.alert.erro {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+
+/* VAZIO */
+
+.empty {
+    text-align: center;
+    padding: 40px;
+    color: #78909c;
+}
+
+
+/* RODAPÉ */
+
+footer {
+    text-align: center;
+    color: #78909c;
+    padding: 30px;
+}
+
+
+/* RESPONSIVO */
+
+@media (max-width: 800px) {
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .form {
+        grid-template-columns: 1fr;
+    }
+
+    .chamada {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-large {
+        width: 100%;
+    }
+
+    th,
+    td {
+        white-space: nowrap;
+    }
+}
